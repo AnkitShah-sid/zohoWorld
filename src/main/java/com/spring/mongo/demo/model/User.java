@@ -18,10 +18,11 @@ public class User implements Serializable {
 	private String id;
 	private String refId;
 	private String name;
-	private String investment;
-	private String profit;
+	private Double investment;
+	private Double profit;
 	private long connection;
 	private List<Income> incomeList;
+	private List<Allconnection> profitIncome;
 
 
 }

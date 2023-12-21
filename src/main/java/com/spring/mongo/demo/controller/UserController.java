@@ -5,10 +5,12 @@ import java.util.Optional;
 import com.spring.mongo.demo.model.User;
 import com.spring.mongo.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.spring.mongo.demo.service.UserService;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/user")
@@ -40,7 +42,7 @@ public class UserController {
 
 	//get User ByUserId
 	@GetMapping("/{id}")
-	public ResponseEntity<User> getCategoryById(@PathVariable String id) {
+	public ResponseEntity<User> getUserById(@PathVariable String id) {
 		Optional<User> user = userRepository.findById(id);
 		if (user.isPresent()) {
 			return ResponseEntity.ok(user.get());
@@ -48,6 +50,7 @@ public class UserController {
 		return ResponseEntity.notFound().build();
 	}
 
+	//create a new connection
 	@PostMapping("/create")
 	public Object createUser(@RequestParam String refId, @RequestBody User newUser) {
 		try {
@@ -58,6 +61,30 @@ public class UserController {
 			return "Error: An unexpected error occurred";
 		}
 	}
+	@GetMapping("/ref/{refId}")
+	public ResponseEntity<List<User>> getAllUsersByRefId(@PathVariable String refId) {
+		List<User> users = userService.getAllUserByRefId(refId);
+
+		if (!users.isEmpty()) {
+			return ResponseEntity.ok(users);
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+	}
+
+	@GetMapping("/ref/{refId}/highest-connection")
+	public ResponseEntity<User> getUserWithHighestConnection(@PathVariable String refId) {
+		try {
+			User userWithHighestConnection = userService.getUserWithHighestConnection(refId);
+			return ResponseEntity.ok(userWithHighestConnection);
+		} catch (ResponseStatusException e) {
+			return ResponseEntity.notFound().build();
+		} catch (Exception e) {
+			// Handle other exceptions if needed
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+
 }
 
 

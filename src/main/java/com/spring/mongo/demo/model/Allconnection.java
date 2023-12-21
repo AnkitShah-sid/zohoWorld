@@ -10,15 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 
-public class Income {
+public class Allconnection {
 
-    private Double direct;
-    private Double level1;
-    private Double level2;
-    private Double level3;
-    private Double level4;
-    private Double level5;
-
-
-
+    private Double longLegProfit;
+    private Double otherProfit;
 }

@@ -2,7 +2,6 @@ package com.spring.mongo.demo.service;
 
 
 import java.util.List;
-import java.util.Optional;
 
 import com.spring.mongo.demo.model.User;
 
@@ -12,4 +11,8 @@ public interface UserService {
 	User saveUser(User user);
 
 	User createUser(String refId, User newUser);
+
+	List<User> getAllUserByRefId(String refId);
+	User getUserWithHighestConnection(String refId);
+
 }
